@@ -20,4 +20,4 @@ app.get('/style', (req,res) => {
     res.set('Content-Type', 'text/css');
     res.send(fs.readFileSync(path.join(process.cwd(), './game/scripts/style.css')))
 });
-app.listen(80);
+app.listen(process.env.PORT || 3000);
