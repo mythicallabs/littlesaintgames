@@ -1,3 +1,6 @@
+//Game 1(ccno): localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2')
+//Game 2(mktval): localStorage.getItem('extensions.turbowarp.org/local-storage:5d274a6e40e409c7')
+//Game 3:
 var ccno = 0;
 var cno = 0;
 var bno = 0;
@@ -10,6 +13,12 @@ function pageloaded(){
         cno = 0
         localStorage.setItem('cno', cno)
     }
+    if(localStorage.getItem('bno')){
+        bno = localStorage.getItem('bno')
+    }else{
+        bno = 0
+        localStorage.setItem('bno', bno)
+    }
     updateCounts()
     document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
     document.getElementById('cno').innerHTML = `Cash: $${cno}`;
@@ -18,6 +27,14 @@ function pageloaded(){
 function updateCounts(){
     if(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2')){
         const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2'));
+        if(obj.data.policeval == 1){
+            obj.data.policeval = 0
+            obj.data.ccno = 0
+            ccno = 0
+            localStorage.setItem('extensions.turbowarp.org/local-storage:bd00529a636515a2', JSON.stringify(obj))
+        }
+        bno = obj.data.bno
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         ccno = obj.data.ccno
         document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
     }
@@ -46,6 +63,20 @@ function sellChildren(){
     cno = parseInt(cno) + (parseInt(tempccno) * parseInt(mktval));
     document.getElementById('cno').innerHTML = `Cash: $${cno}`;
     localStorage.setItem('cno', cno)
+}
+function buyBags(){
+    if(parseInt(document.getElementById('bagAmt').value) * 10 <= cno){
+        bno = bno + parseInt(document.getElementById('bagAmt').value);
+        cno = cno - (parseInt(document.getElementById('bagAmt').value) * 10);
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+        const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2'))
+        obj.data.bno = parseInt(bno)
+        localStorage.setItem('extensions.turbowarp.org/local-storage:bd00529a636515a2', JSON.stringify(obj));
+    }
+}
+function updateBagTotal(){
+    document.getElementById('bagTotal').innerHTML = `Total: $${parseInt(document.getElementById('bagAmt').value) * 10}`
 }
 setInterval(function(){
     updateCounts()

@@ -23,6 +23,7 @@ html, body{
     grid-row-start: 2;
 }
 iframe{
+    border-radius: 25px;
     padding: 0;
     padding-right: 10px;
     margin: 0;
