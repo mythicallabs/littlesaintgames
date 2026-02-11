@@ -2,7 +2,7 @@
 //Game 2(mktval): localStorage.getItem('extensions.turbowarp.org/local-storage:5d274a6e40e409c7')
 //Game 3:
 var ccno = 0;
-var cno = 0;
+var cno = 100;
 var bno = 0;
 var mktval = 0;
 var cap = 100;
@@ -10,7 +10,7 @@ function pageloaded(){
     if(localStorage.getItem('cno')){
         cno = localStorage.getItem('cno')
     }else{
-        cno = 0
+        cno = 100
         localStorage.setItem('cno', cno)
     }
     if(localStorage.getItem('bno')){
