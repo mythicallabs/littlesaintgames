@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="/script"></script>
+        <link rel="stylesheet" href="/style">
+        <title>Little Saint Games[BETA V1.0]</title>
+    </head>
+    <body>
+        <h1>Little Saint Games [BETA V1.0]</h1>
+        <div class="container">
+            <div id="kidnapContainer">
+                <iframe id="scratchFrame" src="/scratchembed?q=0" class="clickerFrame"></iframe>
+            </div>
+            <div id="counts">
+                <h2>Stats</h2>
+                <p id="ccno">Children Collected: Loading...</p>
+                <p id="cno">Cash: Loading...</p>
+                <p id="bno">Bags: Loading...</p>
+            </div>
+            <div id="marketContainer">
+                <iframe id="scratchFrame" src="/scratchembed?q=1" class="clickerFrame"></iframe>
+            </div>
+            <div id="marketStats">
+                <h2>Market Stats</h2>
+                <p id="mktval">Child Value: Loading...</p>
+                <p id="totalmktval">Total Current Value: Loading...</p>
+                <button onclick="sellChildren()">Sell Children</button>
+            </div>
+            <div id="warehouseContainer">
+                <iframe id="scratchFrame" src="/scratchembed?q=2" class="clickerFrame"></iframe>
+            </div>
+            <div id="warehouseStats">
+                <h2>Warehouse Stats</h2>
+                <p id="warecap">Warehouse Capacity: Loading...</p>
+            </div>
+        </div>
+    </body>
+    <script>pageloaded()</script>
+</html>
