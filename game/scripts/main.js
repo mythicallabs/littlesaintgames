@@ -1,23 +1,36 @@
 //Game 1(ccno): localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2')
 //Game 2(mktval): localStorage.getItem('extensions.turbowarp.org/local-storage:5d274a6e40e409c7')
 //Game 3:
+var key1 = 'extensions.turbowarp.org/local-storage:bd00529a636515a2';
+var key2 = 'extensions.turbowarp.org/local-storage:5d274a6e40e409c7';
+var key3 = 'extensions.turbowarp.org/local-storage:a455fde571c68899';
 var ccno = 0;
-var cno = 100;
+var cno = 500;
 var bno = 0;
 var mktval = 0;
 var cap = 100;
 function pageloaded(){
-    if(localStorage.getItem('cno')){
-        cno = localStorage.getItem('cno')
+    if(localStorage.getItem('cno') !== null){
+        cno = parseInt(localStorage.getItem('cno'))
     }else{
         cno = 100
         localStorage.setItem('cno', cno)
     }
-    if(localStorage.getItem('bno')){
-        bno = localStorage.getItem('bno')
+    if(localStorage.getItem('bno') !== null){
+        bno = parseInt(localStorage.getItem('bno'))
     }else{
         bno = 0
         localStorage.setItem('bno', bno)
+    }
+    // Initialize localStorage if not exist
+    if (!localStorage.getItem(key1)) {
+        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
+    }
+    if (!localStorage.getItem(key2)) {
+        localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
+    }
+    if (!localStorage.getItem(key3)) {
+        localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: 0}}));
     }
     updateCounts()
     document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
@@ -25,40 +38,55 @@ function pageloaded(){
     document.getElementById('bno').innerHTML = `Bags: ${bno}`;
 }
 function updateCounts(){
-    if(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2')){
-        const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2'));
+    if(localStorage.getItem(key1)){
+        const obj = JSON.parse(localStorage.getItem(key1));
         if(obj.data.policeval == 1){
             obj.data.policeval = 0
             obj.data.ccno = 0
             ccno = 0
-            localStorage.setItem('extensions.turbowarp.org/local-storage:bd00529a636515a2', JSON.stringify(obj))
+            localStorage.setItem(key1, JSON.stringify(obj))
         }
         bno = obj.data.bno
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         ccno = obj.data.ccno
         document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
+    }else{
+        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
+        bno = 0
+        ccno = 0
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
     }
-    if(localStorage.getItem('extensions.turbowarp.org/local-storage:5d274a6e40e409c7')){
-        const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:5d274a6e40e409c7'));
+    if(localStorage.getItem(key2)){
+        const obj = JSON.parse(localStorage.getItem(key2));
         mktval = obj.data.mktval
+        document.getElementById('mktval').innerHTML = `Child Value: ${mktval}`;
+    }else{
+        localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
+        mktval = 0
         document.getElementById('mktval').innerHTML = `Child Value: ${mktval}`;
     }
     document.getElementById('totalmktval').innerHTML = `Total Current Value: $${ccno * mktval}`;
-    const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:a455fde571c68899'))
-    cap = obj.data.cap
-    obj.data.ccno = ccno
-    localStorage.setItem('extensions.turbowarp.org/local-storage:a455fde571c68899', JSON.stringify(obj))
+    if(localStorage.getItem(key3)){
+        const obj = JSON.parse(localStorage.getItem(key3))
+        cap = obj.data.cap
+        obj.data.ccno = ccno
+        localStorage.setItem(key3, JSON.stringify(obj))
+    }else{
+        localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: ccno}}));
+        cap = 100
+    }
     document.getElementById('warecap').innerHTML = `Warehouse Capacity: ${ccno}/${cap}`;
-    const obj2 = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2'))
+    const obj2 = JSON.parse(localStorage.getItem(key1))
     obj2.data.cap = cap
-    localStorage.setItem('extensions.turbowarp.org/local-storage:bd00529a636515a2', JSON.stringify(obj2))
+    localStorage.setItem(key1, JSON.stringify(obj2))
 }
 function sellChildren(){
     tempccno = ccno;
     ccno = 0;
-    const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2'));
+    const obj = JSON.parse(localStorage.getItem(key1));
     obj.data.ccno = 0
-    localStorage.setItem('extensions.turbowarp.org/local-storage:bd00529a636515a2', JSON.stringify(obj))
+    localStorage.setItem(key1, JSON.stringify(obj))
     document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
     cno = parseInt(cno) + (parseInt(tempccno) * parseInt(mktval));
     document.getElementById('cno').innerHTML = `Cash: $${cno}`;
@@ -70,9 +98,10 @@ function buyBags(){
         cno = cno - (parseInt(document.getElementById('bagAmt').value) * 10);
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         document.getElementById('cno').innerHTML = `Cash: $${cno}`;
-        const obj = JSON.parse(localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2'))
+        const obj = JSON.parse(localStorage.getItem(key1))
         obj.data.bno = parseInt(bno)
-        localStorage.setItem('extensions.turbowarp.org/local-storage:bd00529a636515a2', JSON.stringify(obj));
+        localStorage.setItem(key1, JSON.stringify(obj));
+        localStorage.setItem('cno', cno);
     }
 }
 function updateBagTotal(){
