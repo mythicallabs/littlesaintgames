@@ -3,15 +3,28 @@ html, body{
     padding: 0;
     margin: 0;
 }
+nav {
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+nav h1 {
+    margin: 0;
+    font-size: 2em;
+}
 .clickerFrame{
     border: none;
-    height: 360px;
-    width: 480px;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
 }
 .container{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px;
 }
 #counts{
 
@@ -27,4 +40,58 @@ iframe{
     padding: 0;
     padding-right: 10px;
     margin: 0;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: repeat(1, 100%);
+        grid-template-rows: repeat(6, auto);
+        gap: 15px;
+        padding: 15px;
+    }
+    #marketContainer, #warehouseContainer, #kidnapContainer{
+        aspect-ratio: 4 / 3;
+    }
+    #counts{
+        grid-row-start: 2;
+    }
+    #marketContainer{
+        grid-row-start: 3;
+    }
+    #marketStats{
+        grid-row-start: 4;
+    }
+    #warehouseContainer{
+        grid-row-start: 5;
+    }
+    #warehouseStats{
+        grid-row-start: 6;
+    }
+    iframe {
+        padding-right: 0;
+        border-radius: 15px;
+    }
+    #counts, #marketStats, #warehouseStats {
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    h1 {
+        font-size: 1.5em;
+        text-align: center;
+    }
+    h2, h3 {
+        font-size: 1.2em;
+    }
+    button, input {
+        font-size: 1em;
+        padding: 8px;
+    }
+    .plusminus{
+        width: 45px;
+    }
 }
