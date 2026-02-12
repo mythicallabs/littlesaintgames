@@ -8,22 +8,39 @@ nav {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ccc;
+    position: relative;
 }
 nav h1 {
     margin: 0;
     font-size: 2em;
 }
+
+#darkModeToggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2em;
+    padding: 5px;
+    border: 1px solid #adadad;
+    background-color: #f0f0f0;
+}
+#darkModeToggle:hover {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2em;
+    padding: 5px;
+    border: 1px solid #777777;
+    background-color: #dddddd;
+}
 .clickerFrame{
-    border: none;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    height: auto;
+    border-radius: 10px;
 }
 .container{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: repeat(2, calc(50vh - 50px));
+    row-gap: 10px;
     padding: 10px;
 }
 #counts{
@@ -35,11 +52,28 @@ nav h1 {
 #marketStats{
     grid-row-start: 2;
 }
+#marketStats, #warehouseStats, #counts{
+    padding: 10px;
+    border: 1px solid #adadad;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-right: 10px;
+}
 iframe{
-    border-radius: 25px;
+    border: none;
     padding: 0;
-    padding-right: 10px;
     margin: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+    height: 100%;
+}
+button, input {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #adadad;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 /* Mobile optimization */
@@ -94,4 +128,41 @@ iframe{
     .plusminus{
         width: 45px;
     }
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-mode nav {
+    background-color: #333333;
+    border-bottom: 1px solid #555555;
+}
+
+body.dark-mode #darkModeToggle {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
+
+body.dark-mode #counts, body.dark-mode #marketStats, body.dark-mode #warehouseStats {
+    background-color: #1e1e1e;
+    border: 1px solid #333333;
+}
+
+body.dark-mode button, body.dark-mode input {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
+body.dark-mode #darkModeToggle:hover {
+    background-color: #555555;
+    color: #ffffff;
+    border: 1px solid #777777;
+}
+
+body.dark-mode button:hover, body.dark-mode input:hover {
+    background-color: #555555;
 }
