@@ -12,11 +12,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/script"></script>
         <link rel="stylesheet" href="/style">
-        <title>Little Saint Games V1.12.4 [BETA]</title>
+        <title>Little Saint Games V1.12.5 [BETA]</title>
     </head>
     <body>
         <nav>
-            <h1>Little Saint Games V1.12.4 [BETA]</h1>
+            <h1>Little Saint Games V1.12.5 [BETA]</h1>
             <button id="darkModeToggle" title="Toggle Dark Mode">🌙</button>
         </nav>
         <div class="container">
@@ -51,10 +51,10 @@
                 <p id="warecap">Warehouse Capacity: Loading...</p>
                 <h2>Expand Warehouse</h2>
                 <div id="wareexpand">
-                    <p>Next Warehouse: Loading...</p>
-                    <p>New capacity: Loading...</p>
+                    <p id="nextWarehouse">Next Warehouse: Loading...</p>
+                    <p id="newCapacity">New capacity: Loading...</p>
                 </div>
-                <button onclick="expandWarehouse()">Expand Warehouse ($1000)</button>
+                <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100000)</button>
             </div>
         </div>
     </body>

@@ -9,6 +9,8 @@ var cno = 500;
 var bno = 0;
 var mktval = 0;
 var cap = 100;
+var warehouseLevel = 1;
+var warehouseCost = 100000;
 function pageloaded(){
     if(localStorage.getItem('cno') !== null){
         cno = parseInt(localStorage.getItem('cno'))
@@ -21,6 +23,18 @@ function pageloaded(){
     }else{
         bno = 0
         localStorage.setItem('bno', bno)
+    }
+    if(localStorage.getItem('warehouseLevel') !== null){
+        warehouseLevel = parseInt(localStorage.getItem('warehouseLevel'))
+    }else{
+        warehouseLevel = 1
+        localStorage.setItem('warehouseLevel', warehouseLevel)
+    }
+    if(localStorage.getItem('warehouseCost') !== null){
+        warehouseCost = parseInt(localStorage.getItem('warehouseCost'))
+    }else{
+        warehouseCost = 100000
+        localStorage.setItem('warehouseCost', warehouseCost)
     }
     // Initialize localStorage if not exist
     if (!localStorage.getItem(key1)) {
@@ -41,6 +55,9 @@ function pageloaded(){
     document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
     document.getElementById('cno').innerHTML = `Cash: $${cno}`;
     document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+    document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
+    document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
+    document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${warehouseCost})`;
 }
 function updateCounts(){
     if(localStorage.getItem(key1)){
@@ -112,6 +129,30 @@ function buyBags(){
 function updateBagTotal(){
     document.getElementById('bagTotal').innerHTML = `Total: $${parseInt(document.getElementById('bagAmt').value) * 10}`
 }
+function expandWarehouse(){
+    if(cno >= warehouseCost){
+        cno -= warehouseCost;
+        warehouseLevel++;
+        warehouseCost *= 2;
+        cap *= 2;
+        localStorage.setItem('cno', cno);
+        localStorage.setItem('warehouseLevel', warehouseLevel);
+        localStorage.setItem('warehouseCost', warehouseCost);
+        // Update cap in localStorage
+        const obj3 = JSON.parse(localStorage.getItem(key3));
+        obj3.data.cap = cap;
+        localStorage.setItem(key3, JSON.stringify(obj3));
+        const obj1 = JSON.parse(localStorage.getItem(key1));
+        obj1.data.cap = cap;
+        localStorage.setItem(key1, JSON.stringify(obj1));
+        // Update UI
+        document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+        document.getElementById('warecap').innerHTML = `Warehouse Capacity: ${ccno}/${cap}`;
+        document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
+        document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
+        document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${warehouseCost})`;
+    }
+}
 setInterval(function(){
     updateCounts()
 }, 100)
@@ -136,4 +177,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (toggleButton) {
         toggleButton.addEventListener('click', toggleDarkMode);
     }
+
+    // Make iframe scrolling affect the entire page
+    document.addEventListener('wheel', (e) => {
+        if (e.target.tagName === 'IFRAME') {
+            e.preventDefault();
+            window.scrollBy(0, e.deltaY);
+        }
+    }, { passive: false });
 });
