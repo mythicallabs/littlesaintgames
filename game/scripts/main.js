@@ -32,6 +32,11 @@ function pageloaded(){
     if (!localStorage.getItem(key3)) {
         localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: 0}}));
     }
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').innerHTML = '☀️';
+    }
     updateCounts()
     document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
     document.getElementById('cno').innerHTML = `Cash: $${cno}`;
@@ -110,3 +115,25 @@ function updateBagTotal(){
 setInterval(function(){
     updateCounts()
 }, 100)
+
+// Dark mode toggle function
+function toggleDarkMode() {
+    const body = document.body;
+    const toggleButton = document.getElementById('darkModeToggle');
+    body.classList.toggle('dark-mode');
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'true');
+        toggleButton.innerHTML = '☀️';
+    } else {
+        localStorage.setItem('darkMode', 'false');
+        toggleButton.innerHTML = '🌙';
+    }
+}
+
+// Attach event listener to the toggle button
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('darkModeToggle');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', toggleDarkMode);
+    }
+});

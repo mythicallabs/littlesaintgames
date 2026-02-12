@@ -12,15 +12,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/script"></script>
         <link rel="stylesheet" href="/style">
-        <title>Little Saint Games V1.12.3</title>
+        <title>Little Saint Games V1.12.4 [BETA]</title>
     </head>
     <body>
         <nav>
-            <h1>Little Saint Games V1.12.3</h1>
+            <h1>Little Saint Games V1.12.4 [BETA]</h1>
+            <button id="darkModeToggle" title="Toggle Dark Mode">🌙</button>
         </nav>
         <div class="container">
-            <div id="kidnapContainer">
-                <iframe id="scratchFrame" src="/scratchembed?q=0" class="clickerFrame"></iframe>
+            <div id="kidnapContainer" class="clickerFrame">
+                <iframe id="scratchFrame" src="/scratchembed?q=0"></iframe>
             </div>
             <div id="counts">
                 <h2>Stats</h2>
@@ -33,8 +34,8 @@
                 <p id="bagTotal">Total: $100</p>
                 <button onclick="buyBags()">Buy Bags</button>
             </div>
-            <div id="marketContainer">
-                <iframe id="scratchFrame" src="/scratchembed?q=1" class="clickerFrame"></iframe>
+            <div id="marketContainer" class="clickerFrame">
+                <iframe id="scratchFrame" src="/scratchembed?q=1"></iframe>
             </div>
             <div id="marketStats">
                 <h2>Market Stats</h2>
@@ -42,12 +43,18 @@
                 <p id="totalmktval">Total Current Value: Loading...</p>
                 <button onclick="sellChildren()">Sell Children</button>
             </div>
-            <div id="warehouseContainer">
-                <iframe id="scratchFrame" src="/scratchembed?q=2" class="clickerFrame"></iframe>
+            <div id="warehouseContainer" class="clickerFrame">
+                <iframe id="scratchFrame" src="/scratchembed?q=2"></iframe>
             </div>
             <div id="warehouseStats">
                 <h2>Warehouse Stats</h2>
                 <p id="warecap">Warehouse Capacity: Loading...</p>
+                <h2>Expand Warehouse</h2>
+                <div id="wareexpand">
+                    <p>Next Warehouse: Loading...</p>
+                    <p>New capacity: Loading...</p>
+                </div>
+                <button onclick="expandWarehouse()">Expand Warehouse ($1000)</button>
             </div>
         </div>
     </body>
