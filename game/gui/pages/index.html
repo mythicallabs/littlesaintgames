@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/script"></script>
         <link rel="stylesheet" href="/style">
-        <title>Little Saint Games V1.12.1</title>
+        <title>Little Saint Games V1.12.3 [BETA]</title>
     </head>
     <body>
-        <h1>Little Saint Games V1.12.1</h1>
+        <nav>
+            <h1>Little Saint Games V1.12.3 [BETA]</h1>
+        </nav>
         <div class="container">
             <div id="kidnapContainer">
                 <iframe id="scratchFrame" src="/scratchembed?q=0" class="clickerFrame"></iframe>
@@ -18,7 +21,7 @@
                 <p id="bno">Bags: Loading...</p>
                 <h3>Restock Bags</h3>
                 <p>Bag price: $10/ea</p>
-                <button onclick="if(parseInt(document.getElementById('bagAmt').value) > 0){document.getElementById('bagAmt').value = parseInt(document.getElementById('bagAmt').value) - 10;updateBagTotal()}">-10</button><input type="number" id="bagAmt" value="10" min="0" onchange="updateBagTotal()"><button onclick="document.getElementById('bagAmt').value = parseInt(document.getElementById('bagAmt').value) + 10;updateBagTotal()">+10</button><br>
+                <button class="plusminus" onclick="if(parseInt(document.getElementById('bagAmt').value) > 0){document.getElementById('bagAmt').value = parseInt(document.getElementById('bagAmt').value) - 10;updateBagTotal()}">-10</button><input type="number" id="bagAmt" value="10" min="0" onchange="updateBagTotal()"><button class="plusminus" onclick="document.getElementById('bagAmt').value = parseInt(document.getElementById('bagAmt').value) + 10;updateBagTotal()">+10</button><br>
                 <p id="bagTotal">Total: $100</p>
                 <button onclick="buyBags()">Buy Bags</button>
             </div>
