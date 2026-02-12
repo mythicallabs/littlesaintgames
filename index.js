@@ -20,4 +20,8 @@ app.get('/style', (req,res) => {
     res.set('Content-Type', 'text/css');
     res.send(fs.readFileSync(path.join(process.cwd(), './game/scripts/style.css')))
 });
+app.get('/favicon.ico', (req,res) => {
+    res.set('Content-Type', 'image/x-icon');
+    res.send(fs.readFileSync(path.join(process.cwd(), './game/gui/images/favicon.ico')))
+});
 app.listen(process.env.PORT || 3000);
