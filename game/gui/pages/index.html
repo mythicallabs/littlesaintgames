@@ -16,6 +16,7 @@
         <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
     </head>
     <body>
+        <div id="resetButton"><button onclick="resetGame()">Reset</button></div>
         <nav>
             <h1>Little Saint Games V1.12.6 [BETA]</h1>
             <button id="darkModeToggle" title="Toggle Dark Mode" class="dark-mode">🌙</button>
@@ -55,7 +56,7 @@
                     <p id="nextWarehouse">Next Warehouse: Loading...</p>
                     <p id="newCapacity">New capacity: Loading...</p>
                 </div>
-                <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100000)</button>
+                <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100k)</button>
             </div>
             <div id="employeeContainer" class="clickerFrame">
                 <iframe id="scratchFrame" src="/scratchembed?q=3"></iframe>

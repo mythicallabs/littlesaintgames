@@ -57,12 +57,12 @@ function pageloaded(){
         document.getElementById('darkModeToggle').innerHTML = '☀️';
     }
     updateCounts()
-    document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
-    document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+    document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+    document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
     document.getElementById('bno').innerHTML = `Bags: ${bno}`;
     document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
     document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
-    document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${warehouseCost})`;
+    document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${formatNumber(warehouseCost, 2)})`;
 }
 function updateCounts(){
     if(localStorage.getItem(key4)){
@@ -80,7 +80,7 @@ function updateCounts(){
         }
         localStorage.setItem(key4, JSON.stringify(obj))
         console.log(`${localStorage.getItem(key4)}`)
-        document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         localStorage.setItem('cno', cno)
     }else{
         localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0}}));
@@ -96,24 +96,24 @@ function updateCounts(){
         bno = obj.data.bno
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         ccno = obj.data.ccno
-        document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
+        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
     }else{
         localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
         bno = 0
         ccno = 0
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
-        document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
+        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
     }
     if(localStorage.getItem(key2)){
         const obj = JSON.parse(localStorage.getItem(key2));
         mktval = obj.data.mktval
-        document.getElementById('mktval').innerHTML = `Child Value: ${mktval}`;
+        document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
     }else{
         localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
         mktval = 0
-        document.getElementById('mktval').innerHTML = `Child Value: ${mktval}`;
+        document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
     }
-    document.getElementById('totalmktval').innerHTML = `Total Current Value: $${ccno * mktval}`;
+    document.getElementById('totalmktval').innerHTML = `Total Current Value: $${formatNumber(ccno * mktval, 2)}`;
     if(localStorage.getItem(key3)){
         const obj = JSON.parse(localStorage.getItem(key3))
         cap = obj.data.cap
@@ -134,7 +134,7 @@ function workerSlave(){
         obj.data.ccno = parseInt(obj.data.ccno) + parseInt(empno);
         ccno = parseInt(obj.data.ccno)
         localStorage.setItem(key1, JSON.stringify(obj));
-        document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
+        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
     }
 }
 function sellChildren(){
@@ -143,9 +143,9 @@ function sellChildren(){
     const obj = JSON.parse(localStorage.getItem(key1));
     obj.data.ccno = 0
     localStorage.setItem(key1, JSON.stringify(obj))
-    document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
+    document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
     cno = parseInt(cno) + (parseInt(tempccno) * parseInt(mktval));
-    document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+    document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
     localStorage.setItem('cno', cno)
 }
 function buyBags(){
@@ -153,7 +153,7 @@ function buyBags(){
         bno = bno + parseInt(document.getElementById('bagAmt').value);
         cno = cno - (parseInt(document.getElementById('bagAmt').value) * 10);
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
-        document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         const obj = JSON.parse(localStorage.getItem(key1))
         obj.data.bno = parseInt(bno)
         localStorage.setItem(key1, JSON.stringify(obj));
@@ -161,7 +161,7 @@ function buyBags(){
     }
 }
 function updateBagTotal(){
-    document.getElementById('bagTotal').innerHTML = `Total: $${parseInt(document.getElementById('bagAmt').value) * 10}`
+    document.getElementById('bagTotal').innerHTML = `Total: $${formatNumber(parseInt(document.getElementById('bagAmt').value) * 10, 2)}`
 }
 function expandWarehouse(){
     if(cno >= warehouseCost){
@@ -180,11 +180,11 @@ function expandWarehouse(){
         obj1.data.cap = cap;
         localStorage.setItem(key1, JSON.stringify(obj1));
         // Update UI
-        document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         document.getElementById('warecap').innerHTML = `Warehouse Capacity: ${ccno}/${cap}`;
         document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
         document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
-        document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${warehouseCost})`;
+        document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${formatNumber(warehouseCost, 2)})`;
     }
 }
 setInterval(function(){
@@ -206,6 +206,84 @@ function toggleDarkMode() {
         toggleButton.innerHTML = '🌙';
     }
 }
+const formatNumber = (num, decimals = 2) => {
+    if (num == null) return 'Invalid input';
+
+    // Convert input to a number, removing non-numeric characters if it's a string
+    let numValue = typeof num === 'string' ? parseFloat(num.replace(/[^0-9.-]/g, '')) : Number(num);
+
+    if (isNaN(numValue)) return 'Invalid input';
+
+    // Determine if the number is negative and get its absolute value
+    const isNegative = numValue < 0;
+    const absValue = Math.abs(numValue);
+
+    // If the absolute value is below 1000, return it as is
+    if (absValue < 1000) return isNegative ? `-${absValue}` : absValue;
+
+    // Define suffixes for large numbers
+    const suffixes = [
+        { value: 1e18, symbol: 'E' },
+        { value: 1e15, symbol: 'P' },
+        { value: 1e12, symbol: 'T' },
+        { value: 1e9, symbol: 'B' },
+        { value: 1e6, symbol: 'M' },
+        { value: 1e3, symbol: 'K' }
+    ];
+
+    // Find the largest suffix that fits the number
+    const suffix = suffixes.find(({ value }) => absValue >= value);
+    if (!suffix) return numValue.toString();
+
+    // Format the number by dividing by the suffix value and fixing decimals
+    let formattedValue = (absValue / suffix.value).toFixed(decimals);
+
+    // Remove trailing zeros and unnecessary decimal points
+    formattedValue = formattedValue.replace(/\.?0+$/, '');
+
+    // Add back the negative sign if needed and append the suffix
+    return (isNegative ? '-' : '') + formattedValue + suffix.symbol;
+};
+function resetGame() {
+    if (confirm("Are you sure you want to reset the game? This will erase all progress.")) {
+        // Reset all game variables
+        ccno = 0;
+        cno = 500;
+        bno = 0;
+        mktval = 0;
+        cap = 100;
+        warehouseLevel = 1;
+        warehouseCost = 100000;
+        empno = 0;
+        purchaseInProgress = false;
+        lastUpdateTime = 0;
+        boughtplaceholder = false;
+
+        // Reset localStorage entries
+        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
+        localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
+        localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: 0}}));
+        localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0, empno: 0, time: 0}}));
+        localStorage.setItem('cno', cno);
+        localStorage.setItem('bno', bno);
+        localStorage.setItem('warehouseLevel', warehouseLevel);
+        localStorage.setItem('warehouseCost', warehouseCost);
+
+        // Update UI to reflect reset values
+        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
+        document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
+        document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${formatNumber(warehouseCost, 2)})`;
+        document.getElementById('warecap').innerHTML = `Warehouse Capacity: ${ccno}/${cap}`;
+        document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
+        document.getElementById('totalmktval').innerHTML = `Total Current Value: $${formatNumber(ccno * mktval, 2)}`;
+
+        console.log("Game has been reset.");
+    }
+}
+
 
 // Attach event listener to the toggle button
 document.addEventListener('DOMContentLoaded', function() {
