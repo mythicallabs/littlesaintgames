@@ -184,7 +184,7 @@ function expandWarehouse(){
 }
 setInterval(function(){
     updateCounts()
-}, 50)
+}, 10)
 setInterval(function(){
     workerSlave()
 }, 2000)
