@@ -245,10 +245,21 @@ const formatNumber = (num, decimals = 2) => {
     return (isNegative ? '-' : '') + formattedValue + suffix.symbol;
 };
 function resetGame() {
-    if (confirm("Are you sure you want to reset the game? This will erase all progress.")) {
+    if (!confirm("Are you sure you want to reset the game? This will erase all progress.")) return;
+
+    // Pause all iframes completely
+    const iframes = document.querySelectorAll('iframe');
+    const iframeSources = [];
+    iframes.forEach((iframe, index) => {
+        iframeSources[index] = iframe.src; // save original src
+        iframe.src = 'about:blank';        // disable iframe
+    });
+
+    // Small delay to ensure iframes are completely off
+    setTimeout(() => {
         // Reset all game variables
         ccno = 0;
-        cno = 500;
+        cno = 100;
         bno = 0;
         mktval = 0;
         cap = 100;
@@ -269,7 +280,7 @@ function resetGame() {
         localStorage.setItem('warehouseLevel', warehouseLevel);
         localStorage.setItem('warehouseCost', warehouseCost);
 
-        // Update UI to reflect reset values
+        // Update UI
         document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
@@ -280,11 +291,14 @@ function resetGame() {
         document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
         document.getElementById('totalmktval').innerHTML = `Total Current Value: $${formatNumber(ccno * mktval, 2)}`;
 
-        console.log("Game has been reset.");
-    }
+        // Reload iframes after reset
+        iframes.forEach((iframe, index) => {
+            iframe.src = iframeSources[index];
+        });
+
+        console.log("Game has been reset and iframes reloaded.");
+    }, 50); // 50ms delay ensures iframes are fully unloaded
 }
-
-
 // Attach event listener to the toggle button
 document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('darkModeToggle');
