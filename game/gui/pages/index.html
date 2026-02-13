@@ -12,13 +12,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/script"></script>
         <link rel="stylesheet" href="/style">
-        <title>Little Saint Games V1.12.5</title>
+        <title>Little Saint Games V1.12.6</title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
     </head>
     <body>
+        <div id="resetButton"><button onclick="resetGame()">Reset</button></div>
         <nav>
-            <h1>Little Saint Games V1.12.5</h1>
-            <button id="darkModeToggle" title="Toggle Dark Mode">🌙</button>
+            <h1>Little Saint Games V1.12.6</h1>
+            <button id="darkModeToggle" title="Toggle Dark Mode" class="dark-mode">🌙</button>
         </nav>
         <div class="container">
             <div id="kidnapContainer" class="clickerFrame">
@@ -55,7 +56,10 @@
                     <p id="nextWarehouse">Next Warehouse: Loading...</p>
                     <p id="newCapacity">New capacity: Loading...</p>
                 </div>
-                <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100000)</button>
+                <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100k)</button>
+            </div>
+            <div id="employeeContainer" class="clickerFrame">
+                <iframe id="scratchFrame" src="/scratchembed?q=3"></iframe>
             </div>
         </div>
     </body>
