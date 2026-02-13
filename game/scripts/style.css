@@ -84,7 +84,7 @@ button, input {
         gap: 15px;
         padding: 15px;
     }
-    #marketContainer, #warehouseContainer, #kidnapContainer{
+    #marketContainer, #warehouseContainer, #kidnapContainer, #employeeContainer{
         aspect-ratio: 4 / 3;
     }
     #counts{

@@ -4,6 +4,7 @@
 var key1 = 'extensions.turbowarp.org/local-storage:bd00529a636515a2';
 var key2 = 'extensions.turbowarp.org/local-storage:5d274a6e40e409c7';
 var key3 = 'extensions.turbowarp.org/local-storage:a455fde571c68899';
+var key4 = 'extensions.turbowarp.org/local-storage:1951b976f4f70bd6';
 var ccno = 0;
 var cno = 500;
 var bno = 0;
@@ -11,6 +12,8 @@ var mktval = 0;
 var cap = 100;
 var warehouseLevel = 1;
 var warehouseCost = 100000;
+var empno = 0;
+var purchaseInProgress = false;
 function pageloaded(){
     if(localStorage.getItem('cno') !== null){
         cno = parseInt(localStorage.getItem('cno'))
@@ -60,6 +63,23 @@ function pageloaded(){
     document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${warehouseCost})`;
 }
 function updateCounts(){
+    if(localStorage.getItem(key4)){
+        const obj = JSON.parse(localStorage.getItem(key4))
+        obj.data.cno = cno
+        empno = obj.data.empno
+        if(obj.data.bought != 0 && !purchaseInProgress){
+            purchaseInProgress = true;
+            cno = parseInt(cno) - parseInt(obj.data.bought)
+            obj.data.bought = 0
+            localStorage.setItem(key4, JSON.stringify(obj))
+        }
+        localStorage.setItem(key4, JSON.stringify(obj))
+        document.getElementById('cno').innerHTML = `Cash: $${cno}`;
+        localStorage.setItem('cno', cno)
+        purchaseInProgress = false;
+    }else{
+        localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0}}));
+    }
     if(localStorage.getItem(key1)){
         const obj = JSON.parse(localStorage.getItem(key1));
         if(obj.data.policeval == 1){
@@ -102,6 +122,15 @@ function updateCounts(){
     const obj2 = JSON.parse(localStorage.getItem(key1))
     obj2.data.cap = cap
     localStorage.setItem(key1, JSON.stringify(obj2))
+}
+function workerSlave(){
+    if(ccno + empno <= cap && empno > 0){
+        const obj = JSON.parse(localStorage.getItem(key1));
+        obj.data.ccno = parseInt(obj.data.ccno) + parseInt(empno);
+        ccno = parseInt(obj.data.ccno)
+        localStorage.setItem(key1, JSON.stringify(obj));
+        document.getElementById('ccno').innerHTML = `Children Collected: ${ccno}`;
+    }
 }
 function sellChildren(){
     tempccno = ccno;
@@ -155,8 +184,10 @@ function expandWarehouse(){
 }
 setInterval(function(){
     updateCounts()
-}, 100)
-
+}, 50)
+setInterval(function(){
+    workerSlave()
+}, 2000)
 // Dark mode toggle function
 function toggleDarkMode() {
     const body = document.body;
@@ -179,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Make iframe scrolling affect the entire page
-    document.addEventListener('wheel', (e) => {
+    document.addEventListener('scroll', (e) => {
         if (e.target.tagName === 'IFRAME') {
             e.preventDefault();
             window.scrollBy(0, e.deltaY);
