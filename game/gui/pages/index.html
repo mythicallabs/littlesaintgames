@@ -12,18 +12,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/script"></script>
         <link rel="stylesheet" href="/style">
-        <title>Little Saint Games V1.12.7[BETA]</title>
+        <title>Little Saint Games V1.12.7[UNSTABLE]</title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
     </head>
     <body>
         <div id="resetButton"><button onclick="resetGame()">Reset</button></div>
         <nav>
-            <h1>Little Saint Games V1.12.7[BETA]</h1>
+            <h1>Little Saint Games V1.12.7[UNSTABLE]</h1>
             <button id="darkModeToggle" title="Toggle Dark Mode" class="dark-mode">🌙</button>
         </nav>
         <div class="container">
             <div id="kidnapContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=0"></iframe>
+                <iframe id="scratchFrame" src="/scratchembed?q=0" loading="eager"></iframe>
             </div>
             <div id="counts">
                 <h2>Stats</h2>
@@ -37,7 +37,7 @@
                 <button onclick="buyBags()">Buy Bags</button>
             </div>
             <div id="marketContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=1"></iframe>
+                <iframe id="scratchFrame" src="/scratchembed?q=1" loading="eager"></iframe>
             </div>
             <div id="marketStats">
                 <h2>Market Stats</h2>
@@ -59,7 +59,7 @@
                 <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100k)</button>
             </div>
             <div id="employeeContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=3"></iframe>
+                <iframe id="scratchFrame" src="/scratchembed?q=3" loading="eager"></iframe>
             </div>
         </div>
     </body>
