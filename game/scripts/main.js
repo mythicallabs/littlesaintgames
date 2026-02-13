@@ -14,6 +14,8 @@ var warehouseLevel = 1;
 var warehouseCost = 100000;
 var empno = 0;
 var purchaseInProgress = false;
+var lastUpdateTime = 0;
+var boughtplaceholder = false;
 function pageloaded(){
     if(localStorage.getItem('cno') !== null){
         cno = parseInt(localStorage.getItem('cno'))
@@ -67,16 +69,19 @@ function updateCounts(){
         const obj = JSON.parse(localStorage.getItem(key4))
         obj.data.cno = cno
         empno = obj.data.empno
-        if(obj.data.bought != 0 && !purchaseInProgress){
-            purchaseInProgress = true;
-            cno = parseInt(cno) - parseInt(obj.data.bought)
-            obj.data.bought = 0
-            localStorage.setItem(key4, JSON.stringify(obj))
+        if(obj.data.time !== null && obj.data.time != lastUpdateTime){
+            lastUpdateTime = obj.data.time;
+            cno = parseInt(cno) - parseInt(obj.data.bought);
+            boughtplaceholder = 0;
+        }
+        if(boughtplaceholder == 0 && obj.data.bought > 0){
+            obj.data.bought = 0;
+            boughtplaceholder = false;
         }
         localStorage.setItem(key4, JSON.stringify(obj))
+        console.log(`${localStorage.getItem(key4)}`)
         document.getElementById('cno').innerHTML = `Cash: $${cno}`;
         localStorage.setItem('cno', cno)
-        purchaseInProgress = false;
     }else{
         localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0}}));
     }
