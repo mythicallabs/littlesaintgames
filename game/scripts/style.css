@@ -52,7 +52,7 @@ nav h1 {
 #marketStats{
     grid-row-start: 2;
 }
-#marketStats, #warehouseStats, #counts{
+#marketStats, #warehouseStats, #counts, #managerHiring{
     padding: 10px;
     border: 1px solid #adadad;
     background-color: #f0f0f0;
@@ -106,7 +106,7 @@ button, input {
         padding-right: 0;
         border-radius: 15px;
     }
-    #counts, #marketStats, #warehouseStats {
+    #counts, #marketStats, #warehouseStats, #managerHiring {
         
         display: flex;
         flex-direction: column;
@@ -147,7 +147,7 @@ body.dark-mode #darkModeToggle {
     border: 1px solid #555555;
 }
 
-body.dark-mode #counts, body.dark-mode #marketStats, body.dark-mode #warehouseStats {
+body.dark-mode #counts, body.dark-mode #marketStats, body.dark-mode #warehouseStats, body.dark-mode #managerHiring {
     background-color: #1e1e1e;
     border: 1px solid #333333;
 }

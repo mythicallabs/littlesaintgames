@@ -1,6 +1,7 @@
 //Game 1(ccno): localStorage.getItem('extensions.turbowarp.org/local-storage:bd00529a636515a2')
 //Game 2(mktval): localStorage.getItem('extensions.turbowarp.org/local-storage:5d274a6e40e409c7')
-//Game 3:
+//Game 3(warehouse): localStorage.getItem('extensions.turbowarp.org/local-storage:a455fde571c68899')
+//game 4(employees): localStorage.getItem('extensions.turbowarp.org/local-storage:1951b976f4f70bd6')
 var key1 = 'extensions.turbowarp.org/local-storage:bd00529a636515a2';
 var key2 = 'extensions.turbowarp.org/local-storage:5d274a6e40e409c7';
 var key3 = 'extensions.turbowarp.org/local-storage:a455fde571c68899';
@@ -16,6 +17,8 @@ var empno = 0;
 var purchaseInProgress = false;
 var lastUpdateTime = 0;
 var boughtplaceholder = false;
+var managerLevel = 0;
+var combo = 0;
 function pageloaded(){
     if(localStorage.getItem('cno') !== null){
         cno = parseInt(localStorage.getItem('cno'))
@@ -41,6 +44,12 @@ function pageloaded(){
         warehouseCost = 100000
         localStorage.setItem('warehouseCost', warehouseCost)
     }
+    if(localStorage.getItem('managerLevel') !== null){
+        managerLevel = parseInt(localStorage.getItem('managerLevel'))
+    }else{
+        managerLevel = 0
+        localStorage.setItem('managerLevel', managerLevel)
+    }
     // Initialize localStorage if not exist
     if (!localStorage.getItem(key1)) {
         localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
@@ -63,8 +72,45 @@ function pageloaded(){
     document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
     document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
     document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${formatNumber(warehouseCost, 2)})`;
+    if(managerLevel == 1){
+        document.getElementById(`managerName1`).innerHTML = `Jeffery Epstein`;
+        document.getElementById(`managerEffect1`).innerHTML = `2x Employee Profit`;
+        document.getElementById(`hireManagerButton1`).innerHTML = `Hire Manager ($10M)`;
+        document.getElementById(`managerName2`).style.display = `none`;
+        document.getElementById(`managerEffect2`).style.display = `none`;
+        document.getElementById(`hireManagerButton2`).style.display = `none`;
+        document.getElementById(`managerHr2`).style.display = `none`;
+    }else if(managerLevel == 2){
+        document.getElementById(`managerName1`).style.display = `none`;
+        document.getElementById(`managerEffect1`).style.display = `none`;
+        document.getElementById(`hireManagerButton1`).style.display = `none`;
+        document.getElementById(`managerHr1`).style.display = `none`;
+    }
 }
 function updateCounts(){
+    if(localStorage.getItem(key1)){
+        const obj = JSON.parse(localStorage.getItem(key1));
+        if(obj.data.policeval == 1){
+            obj.data.policeval = 0
+            obj.data.ccno = 0
+            ccno = 0
+            localStorage.setItem(key1, JSON.stringify(obj))
+        }
+        if (obj.data.bno !== bno) {
+            bno = obj.data.bno
+            document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        }
+        combo = obj.data.combo
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        ccno = obj.data.ccno
+        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+    }else{
+        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
+        bno = 0
+        ccno = 0
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+    }
     if(localStorage.getItem(key4)){
         const obj = JSON.parse(localStorage.getItem(key4))
         obj.data.cno = cno
@@ -79,34 +125,18 @@ function updateCounts(){
             boughtplaceholder = false;
         }
         localStorage.setItem(key4, JSON.stringify(obj))
-        console.log(`${localStorage.getItem(key4)}`)
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         localStorage.setItem('cno', cno)
     }else{
         localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0}}));
     }
-    if(localStorage.getItem(key1)){
-        const obj = JSON.parse(localStorage.getItem(key1));
-        if(obj.data.policeval == 1){
-            obj.data.policeval = 0
-            obj.data.ccno = 0
-            ccno = 0
-            localStorage.setItem(key1, JSON.stringify(obj))
-        }
-        bno = obj.data.bno
-        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
-        ccno = obj.data.ccno
-        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-    }else{
-        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
-        bno = 0
-        ccno = 0
-        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
-        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-    }
     if(localStorage.getItem(key2)){
         const obj = JSON.parse(localStorage.getItem(key2));
+        obj.data.combo = combo
+        console.log(`Combo: ${combo}`)
         mktval = obj.data.mktval
+        localStorage.setItem(key2, JSON.stringify(obj));
+        console.log(`Localstorage for combo set to latest combo: ${combo}`)
         document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
     }else{
         localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
@@ -114,13 +144,12 @@ function updateCounts(){
         document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
     }
     document.getElementById('totalmktval').innerHTML = `Total Current Value: $${formatNumber(ccno * mktval, 2)}`;
-    if(localStorage.getItem(key3)){
+    if(localStorage.getItem(key3) !== null){
         const obj = JSON.parse(localStorage.getItem(key3))
         cap = obj.data.cap
         obj.data.ccno = ccno
         localStorage.setItem(key3, JSON.stringify(obj))
     }else{
-        localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: ccno}}));
         cap = 100
     }
     document.getElementById('warecap').innerHTML = `Warehouse Capacity: ${ccno}/${cap}`;
@@ -129,12 +158,39 @@ function updateCounts(){
     localStorage.setItem(key1, JSON.stringify(obj2))
 }
 function workerSlave(){
-    if(ccno + empno <= cap && empno > 0){
-        const obj = JSON.parse(localStorage.getItem(key1));
-        obj.data.ccno = parseInt(obj.data.ccno) + parseInt(empno);
-        ccno = parseInt(obj.data.ccno)
-        localStorage.setItem(key1, JSON.stringify(obj));
-        document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+    if(managerLevel > 0){
+        if(parseInt(ccno) + (parseInt(empno) * (2 * parseInt(managerLevel))) <= cap && empno > 0 || ccno == 0){
+            const obj = JSON.parse(localStorage.getItem(key1));
+            obj.data.ccno = parseInt(obj.data.ccno) + (parseInt(empno) * (2 * parseInt(managerLevel)));
+            ccno = parseInt(obj.data.ccno)
+            localStorage.setItem(key1, JSON.stringify(obj));
+            document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+            console.log(`Added ${parseInt(empno) * (2 * parseInt(managerLevel))} children from employees with managers. Total: ${ccno}`);
+        }else if(empno > 0){
+            const obj = JSON.parse(localStorage.getItem(key1));
+            obj.data.ccno = cap;
+            ccno = parseInt(obj.data.ccno)
+            localStorage.setItem(key1, JSON.stringify(obj));
+            document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+            console.log(`Added ${parseInt(empno) * (2 * parseInt(managerLevel))} children from employees using set to cap with managers. Total: ${ccno}`);
+        }
+    }else{
+        if(ccno + empno <= cap && empno > 0 || ccno == 0){
+            const obj = JSON.parse(localStorage.getItem(key1));
+            obj.data.ccno = parseInt(obj.data.ccno) + parseInt(empno);
+            ccno = parseInt(obj.data.ccno)
+            localStorage.setItem(key1, JSON.stringify(obj));
+            document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+            console.log(`Added ${parseInt(empno)} children from employees without managers. Total: ${ccno}`);
+            
+        }else if(empno > 0 || cap < ccno){
+            const obj = JSON.parse(localStorage.getItem(key1));
+            obj.data.ccno = cap;
+            ccno = parseInt(obj.data.ccno)
+            localStorage.setItem(key1, JSON.stringify(obj));
+            document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
+            console.log(`Added ${parseInt(empno)} children from employees using set to cap without managers. Total: ${ccno}`);
+        }
     }
 }
 function sellChildren(){
@@ -147,6 +203,7 @@ function sellChildren(){
     cno = parseInt(cno) + (parseInt(tempccno) * parseInt(mktval));
     document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
     localStorage.setItem('cno', cno)
+    reportSale(tempccno);
 }
 function buyBags(){
     if(parseInt(document.getElementById('bagAmt').value) * 10 <= cno){
@@ -160,8 +217,36 @@ function buyBags(){
         localStorage.setItem('cno', cno);
     }
 }
+function hireManager(id){
+    if(id == 1 && managerLevel == 0 && cno >= 5000000){
+        managerLevel = 1;
+        cno -= 5000000;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
+        document.getElementById(`managerName1`).innerHTML = `Jeffery Epstein`;
+        document.getElementById(`managerEffect1`).innerHTML = `2x Employee Profit`;
+        document.getElementById(`hireManagerButton1`).innerHTML = `Hire Manager ($10M)`;
+        document.getElementById(`managerName2`).style.display = `none`;
+        document.getElementById(`managerEffect2`).style.display = `none`;
+        document.getElementById(`hireManagerButton2`).style.display = `none`;
+        document.getElementById(`managerHr2`).style.display = `none`;
+    }else if(id == 2 && cno >= 10000000){
+        managerLevel = 2;
+        cno -= 10000000;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
+        document.getElementById(`managerName1`).style.display = `none`;
+        document.getElementById(`managerEffect1`).style.display = `none`;
+        document.getElementById(`hireManagerButton1`).style.display = `none`;
+        document.getElementById(`managerHr1`).style.display = `none`;
+    }
+}
 function updateBagTotal(){
-    document.getElementById('bagTotal').innerHTML = `Total: $${formatNumber(parseInt(document.getElementById('bagAmt').value) * 10, 2)}`
+    document.getElementById('bagTotal').innerHTML = `Total: $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}`
+}
+function reportSale(amount){
+    const obj = JSON.parse(localStorage.getItem(key2));
+    obj.data.ccno = amount
+    localStorage.setItem(key2, JSON.stringify(obj))
+
 }
 function expandWarehouse(){
     if(cno >= warehouseCost){
@@ -192,7 +277,7 @@ setInterval(function(){
 }, 10)
 setInterval(function(){
     workerSlave()
-}, 2000)
+}, 1000)
 // Dark mode toggle function
 function toggleDarkMode() {
     const body = document.body;
