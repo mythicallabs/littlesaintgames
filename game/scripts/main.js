@@ -19,46 +19,47 @@ var lastUpdateTime = 0;
 var boughtplaceholder = false;
 var managerLevel = 0;
 var combo = 0;
-function pageloaded(){
-    if(localStorage.getItem('cno') !== null){
+var buyingBags = false;
+function pageloaded() {
+    if (localStorage.getItem('cno') !== null) {
         cno = parseInt(localStorage.getItem('cno'))
-    }else{
+    } else {
         cno = 100
         localStorage.setItem('cno', cno)
     }
-    if(localStorage.getItem('bno') !== null){
+    if (localStorage.getItem('bno') !== null) {
         bno = parseInt(localStorage.getItem('bno'))
-    }else{
+    } else {
         bno = 0
         localStorage.setItem('bno', bno)
     }
-    if(localStorage.getItem('warehouseLevel') !== null){
+    if (localStorage.getItem('warehouseLevel') !== null) {
         warehouseLevel = parseInt(localStorage.getItem('warehouseLevel'))
-    }else{
+    } else {
         warehouseLevel = 1
         localStorage.setItem('warehouseLevel', warehouseLevel)
     }
-    if(localStorage.getItem('warehouseCost') !== null){
+    if (localStorage.getItem('warehouseCost') !== null) {
         warehouseCost = parseInt(localStorage.getItem('warehouseCost'))
-    }else{
+    } else {
         warehouseCost = 100000
         localStorage.setItem('warehouseCost', warehouseCost)
     }
-    if(localStorage.getItem('managerLevel') !== null){
+    if (localStorage.getItem('managerLevel') !== null) {
         managerLevel = parseInt(localStorage.getItem('managerLevel'))
-    }else{
+    } else {
         managerLevel = 0
         localStorage.setItem('managerLevel', managerLevel)
     }
     // Initialize localStorage if not exist
     if (!localStorage.getItem(key1)) {
-        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
+        localStorage.setItem(key1, JSON.stringify({ data: { policeval: 0, ccno: 0, bno: 0, cap: 100 } }));
     }
     if (!localStorage.getItem(key2)) {
-        localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
+        localStorage.setItem(key2, JSON.stringify({ data: { mktval: 0 } }));
     }
     if (!localStorage.getItem(key3)) {
-        localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: 0}}));
+        localStorage.setItem(key3, JSON.stringify({ data: { cap: 100, ccno: 0 } }));
     }
     // Load dark mode preference
     if (localStorage.getItem('darkMode') === 'true') {
@@ -72,7 +73,7 @@ function pageloaded(){
     document.getElementById('nextWarehouse').innerHTML = `Next Warehouse: Level ${warehouseLevel + 1}`;
     document.getElementById('newCapacity').innerHTML = `New capacity: ${cap * 2}`;
     document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${formatNumber(warehouseCost, 2)})`;
-    if(managerLevel == 1){
+    if (managerLevel == 1) {
         document.getElementById(`managerName1`).innerHTML = `Jeffery Epstein`;
         document.getElementById(`managerEffect1`).innerHTML = `2x Employee Profit`;
         document.getElementById(`hireManagerButton1`).innerHTML = `Hire Manager ($10M)`;
@@ -80,23 +81,23 @@ function pageloaded(){
         document.getElementById(`managerEffect2`).style.display = `none`;
         document.getElementById(`hireManagerButton2`).style.display = `none`;
         document.getElementById(`managerHr2`).style.display = `none`;
-    }else if(managerLevel == 2){
+    } else if (managerLevel == 2) {
         document.getElementById(`managerName1`).style.display = `none`;
         document.getElementById(`managerEffect1`).style.display = `none`;
         document.getElementById(`hireManagerButton1`).style.display = `none`;
         document.getElementById(`managerHr1`).style.display = `none`;
     }
 }
-function updateCounts(){
-    if(localStorage.getItem(key1)){
+function updateCounts() {
+    if (localStorage.getItem(key1)) {
         const obj = JSON.parse(localStorage.getItem(key1));
-        if(obj.data.policeval == 1){
+        if (obj.data.policeval == 1) {
             obj.data.policeval = 0
             obj.data.ccno = 0
             ccno = 0
             localStorage.setItem(key1, JSON.stringify(obj))
         }
-        if (obj.data.bno !== bno) {
+        if (obj.data.bno !== bno && !buyingBags) {
             bno = obj.data.bno
             document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         }
@@ -104,52 +105,50 @@ function updateCounts(){
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         ccno = obj.data.ccno
         document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-    }else{
-        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
+    } else {
+        localStorage.setItem(key1, JSON.stringify({ data: { policeval: 0, ccno: 0, bno: 0, cap: 100 } }));
         bno = 0
         ccno = 0
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
     }
-    if(localStorage.getItem(key4)){
+    if (localStorage.getItem(key4)) {
         const obj = JSON.parse(localStorage.getItem(key4))
         obj.data.cno = cno
         empno = obj.data.empno
-        if(obj.data.time !== null && obj.data.time != lastUpdateTime){
+        if (obj.data.time !== null && obj.data.time != lastUpdateTime) {
             lastUpdateTime = obj.data.time;
             cno = parseInt(cno) - parseInt(obj.data.bought);
             boughtplaceholder = 0;
         }
-        if(boughtplaceholder == 0 && obj.data.bought > 0){
+        if (boughtplaceholder == 0 && obj.data.bought > 0) {
             obj.data.bought = 0;
             boughtplaceholder = false;
         }
         localStorage.setItem(key4, JSON.stringify(obj))
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         localStorage.setItem('cno', cno)
-    }else{
-        localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0}}));
+    } else {
+        localStorage.setItem(key4, JSON.stringify({ data: { cno: cno, bought: 0 } }));
     }
-    if(localStorage.getItem(key2)){
+    if (localStorage.getItem(key2)) {
         const obj = JSON.parse(localStorage.getItem(key2));
         obj.data.combo = combo
-        console.log(`Combo: ${combo}`)
         mktval = obj.data.mktval
         localStorage.setItem(key2, JSON.stringify(obj));
-        console.log(`Localstorage for combo set to latest combo: ${combo}`)
         document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
-    }else{
-        localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
+    } else {
+        localStorage.setItem(key2, JSON.stringify({ data: { mktval: 0 } }));
         mktval = 0
         document.getElementById('mktval').innerHTML = `Child Value: ${formatNumber(mktval, 2)}`;
     }
     document.getElementById('totalmktval').innerHTML = `Total Current Value: $${formatNumber(ccno * mktval, 2)}`;
-    if(localStorage.getItem(key3) !== null){
+    if (localStorage.getItem(key3) !== null) {
         const obj = JSON.parse(localStorage.getItem(key3))
         cap = obj.data.cap
         obj.data.ccno = ccno
         localStorage.setItem(key3, JSON.stringify(obj))
-    }else{
+    } else {
         cap = 100
     }
     document.getElementById('warecap').innerHTML = `Warehouse Capacity: ${ccno}/${cap}`;
@@ -157,43 +156,48 @@ function updateCounts(){
     obj2.data.cap = cap
     localStorage.setItem(key1, JSON.stringify(obj2))
 }
-function workerSlave(){
-    if(managerLevel > 0){
-        if(parseInt(ccno) + (parseInt(empno) * (2 * parseInt(managerLevel))) <= cap && empno > 0 || ccno == 0){
+function workerSlave() {
+    if (managerLevel > 0) {
+        if (parseInt(ccno) + (parseInt(empno) * (2 * parseInt(managerLevel))) <= cap && empno > 0 || ccno == 0) {
             const obj = JSON.parse(localStorage.getItem(key1));
             obj.data.ccno = parseInt(obj.data.ccno) + (parseInt(empno) * (2 * parseInt(managerLevel)));
             ccno = parseInt(obj.data.ccno)
             localStorage.setItem(key1, JSON.stringify(obj));
             document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-            console.log(`Added ${parseInt(empno) * (2 * parseInt(managerLevel))} children from employees with managers. Total: ${ccno}`);
-        }else if(empno > 0){
+        } else if (empno > 0) {
             const obj = JSON.parse(localStorage.getItem(key1));
             obj.data.ccno = cap;
             ccno = parseInt(obj.data.ccno)
             localStorage.setItem(key1, JSON.stringify(obj));
             document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-            console.log(`Added ${parseInt(empno) * (2 * parseInt(managerLevel))} children from employees using set to cap with managers. Total: ${ccno}`);
         }
-    }else{
-        if(ccno + empno <= cap && empno > 0 || ccno == 0){
+    } else {
+        if (ccno + empno <= cap && empno > 0 || ccno == 0) {
             const obj = JSON.parse(localStorage.getItem(key1));
             obj.data.ccno = parseInt(obj.data.ccno) + parseInt(empno);
             ccno = parseInt(obj.data.ccno)
             localStorage.setItem(key1, JSON.stringify(obj));
             document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-            console.log(`Added ${parseInt(empno)} children from employees without managers. Total: ${ccno}`);
-            
-        }else if(empno > 0 || cap < ccno){
+
+        } else if (empno > 0 || cap < ccno) {
             const obj = JSON.parse(localStorage.getItem(key1));
             obj.data.ccno = cap;
             ccno = parseInt(obj.data.ccno)
             localStorage.setItem(key1, JSON.stringify(obj));
             document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-            console.log(`Added ${parseInt(empno)} children from employees using set to cap without managers. Total: ${ccno}`);
         }
     }
 }
-function sellChildren(){
+function sellChildren() {
+    // --- UNLOAD embed0 ---
+    var __embed0 = document.getElementById("embed0");
+    var __embed0Src = null;
+
+    if (__embed0) {
+        __embed0Src = __embed0.src;
+        __embed0.src = "about:blank";
+    }
+    setTimeout(function () {
     tempccno = ccno;
     ccno = 0;
     const obj = JSON.parse(localStorage.getItem(key1));
@@ -204,21 +208,86 @@ function sellChildren(){
     document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
     localStorage.setItem('cno', cno)
     reportSale(tempccno);
+    }, 200)
+    // --- RELOAD embed0 ---
+    if (__embed0 && __embed0Src) {
+        setTimeout(function () {
+            __embed0.src = __embed0Src;
+        }, 50);
+    }
+
 }
-function buyBags(){
-    if(parseInt(document.getElementById('bagAmt').value) * 10 <= cno){
+function buyBags() {
+    // --- UNLOAD embed0 ---
+    var __embed0 = document.getElementById("embed0");
+    var __embed0Src = null;
+
+    if (__embed0) {
+        __embed0Src = __embed0.src;
+        __embed0.src = "about:blank";
+    }
+
+    oldBno = bno;
+    if (buyingBags) return; // Prevent multiple simultaneous purchases
+    buyingBags = true;
+    console.debug(`Attempting to buy bags. Bag amount: ${document.getElementById('bagAmt').value}, Total cost: $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}, Current cash: $${formatNumber(cno, 2)}`)
+    if (parseInt(document.getElementById('bagAmt').value) * 10 <= cno) {
+        const bagAmount = parseInt(document.getElementById('bagAmt').value);
         bno = bno + parseInt(document.getElementById('bagAmt').value);
         cno = cno - (parseInt(document.getElementById('bagAmt').value) * 10);
-        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
-        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         const obj = JSON.parse(localStorage.getItem(key1))
         obj.data.bno = parseInt(bno)
         localStorage.setItem(key1, JSON.stringify(obj));
         localStorage.setItem('cno', cno);
+        console.debug(`Bags purchased successfully. New bag count: ${bno}, New cash amount: $${formatNumber(cno, 2)}`)
+        console.debug(`Starting check purchase interval to make sure bags were added. Bag amount: ${bagAmount}, Old bags: ${oldBno}, Current bags: ${bno}`)
+        setTimeout(function () {
+            if (bno !== oldBno + bagAmount) {
+                bno = oldBno + bagAmount;
+                const obj = JSON.parse(localStorage.getItem(key1))
+                obj.data.bno = parseInt(bno)
+                localStorage.setItem(key1, JSON.stringify(obj));
+                console.warn(`Bags were not added correctly. Adding bags again. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
+            };
+        }, 200)
+        setTimeout(function () {
+            if (bno !== oldBno + bagAmount) {
+                bno = oldBno + bagAmount;
+                const obj = JSON.parse(localStorage.getItem(key1))
+                obj.data.bno = parseInt(bno)
+                localStorage.setItem(key1, JSON.stringify(obj));
+                console.warn(`Bags were removed incorrectly. Adding bags again. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
+            }
+        }, 100)
+        buyingBags = false;
+        document.getElementById('bno').innerHTML = `Bags: ${bno}`;
+        document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
+        console.debug(`Bags were added successfully. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
+        for (let i = 4; i >= 0; i--) {
+            console.debug(`Setting buy bags button to invalid. Time until re-enable: ${i}s`)
+            setTimeout(function () {
+                document.getElementById('buybagsbutton').classList.add('invalid');
+                document.getElementById('buybagsbutton').innerHTML = `<button onclick="buyBags()">Buy Bags (${i + 1}s)</button>`;
+            }, -i * 1000)
+        }
+        setTimeout(function () {
+            document.getElementById('buybagsbutton').classList.remove('invalid');
+            document.getElementById('buybagsbutton').innerHTML = `<button onclick="buyBags()">Buy Bags</button>`;
+        }, 5000)
+    } else {
+        console.debug(`Not enough cash to buy bags. Attempted to buy ${document.getElementById('bagAmt').value} bags for $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}, but only have $${formatNumber(cno, 2)}`)
+        return;
     }
+    // --- RELOAD embed0 ---
+    if (__embed0 && __embed0Src) {
+        setTimeout(function () {
+            __embed0.src = __embed0Src;
+        }, 50);
+    }
+
 }
-function hireManager(id){
-    if(id == 1 && managerLevel == 0 && cno >= 5000000){
+function hireManager(id) {
+    if (id == 1 && managerLevel == 0 && cno >= 5000000) {
         managerLevel = 1;
         cno -= 5000000;
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
@@ -229,7 +298,7 @@ function hireManager(id){
         document.getElementById(`managerEffect2`).style.display = `none`;
         document.getElementById(`hireManagerButton2`).style.display = `none`;
         document.getElementById(`managerHr2`).style.display = `none`;
-    }else if(id == 2 && cno >= 10000000){
+    } else if (id == 2 && cno >= 10000000) {
         managerLevel = 2;
         cno -= 10000000;
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
@@ -239,17 +308,18 @@ function hireManager(id){
         document.getElementById(`managerHr1`).style.display = `none`;
     }
 }
-function updateBagTotal(){
+function updateBagTotal() {
+    console.debug(`Updating bag total. Bag amount: ${document.getElementById('bagAmt').value}, Total: $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}`)
     document.getElementById('bagTotal').innerHTML = `Total: $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}`
 }
-function reportSale(amount){
+function reportSale(amount) {
     const obj = JSON.parse(localStorage.getItem(key2));
     obj.data.ccno = amount
     localStorage.setItem(key2, JSON.stringify(obj))
 
 }
-function expandWarehouse(){
-    if(cno >= warehouseCost){
+function expandWarehouse() {
+    if (cno >= warehouseCost) {
         cno -= warehouseCost;
         warehouseLevel++;
         warehouseCost *= 2;
@@ -272,10 +342,10 @@ function expandWarehouse(){
         document.getElementById('expandButton').innerHTML = `Expand Warehouse ($${formatNumber(warehouseCost, 2)})`;
     }
 }
-setInterval(function(){
+setInterval(function () {
     updateCounts()
-}, 10)
-setInterval(function(){
+}, 99)
+setInterval(function () {
     workerSlave()
 }, 1000)
 // Dark mode toggle function
@@ -356,10 +426,10 @@ function resetGame() {
         boughtplaceholder = false;
 
         // Reset localStorage entries
-        localStorage.setItem(key1, JSON.stringify({data: {policeval: 0, ccno: 0, bno: 0, cap: 100}}));
-        localStorage.setItem(key2, JSON.stringify({data: {mktval: 0}}));
-        localStorage.setItem(key3, JSON.stringify({data: {cap: 100, ccno: 0}}));
-        localStorage.setItem(key4, JSON.stringify({data: {cno: cno, bought: 0, empno: 0, time: 0}}));
+        localStorage.setItem(key1, JSON.stringify({ data: { policeval: 0, ccno: 0, bno: 0, cap: 100 } }));
+        localStorage.setItem(key2, JSON.stringify({ data: { mktval: 0 } }));
+        localStorage.setItem(key3, JSON.stringify({ data: { cap: 100, ccno: 0 } }));
+        localStorage.setItem(key4, JSON.stringify({ data: { cno: cno, bought: 0, empno: 0, time: 0 } }));
         localStorage.setItem('cno', cno);
         localStorage.setItem('bno', bno);
         localStorage.setItem('warehouseLevel', warehouseLevel);
@@ -381,11 +451,11 @@ function resetGame() {
             iframe.src = iframeSources[index];
         });
 
-        console.log("Game has been reset and iframes reloaded.");
+        console.warn("Game has been reset and iframes reloaded.");
     }, 50); // 50ms delay ensures iframes are fully unloaded
 }
 // Attach event listener to the toggle button
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const toggleButton = document.getElementById('darkModeToggle');
     if (toggleButton) {
         toggleButton.addEventListener('click', toggleDarkMode);

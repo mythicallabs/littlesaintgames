@@ -14,7 +14,11 @@ nav h1 {
     margin: 0;
     font-size: 2em;
 }
-
+#buybagsbutton button .invalid {
+    background-color: rgb(192, 53, 53);
+    border-color: rgb(109, 11, 11);
+    cursor: not-allowed;
+}
 #darkModeToggle {
     position: absolute;
     top: 10px;

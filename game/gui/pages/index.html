@@ -23,7 +23,7 @@
         </nav>
         <div class="container">
             <div id="kidnapContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=0" loading="eager"></iframe>
+                <iframe id="embed0" src="/scratchembed?q=0" loading="eager"></iframe>
             </div>
             <div id="counts">
                 <h2>Stats</h2>
@@ -34,10 +34,12 @@
                 <p>Bag price: $10/ea</p>
                 <button class="plusminus" onclick="if(parseInt(document.getElementById('bagAmt').value) > 0){document.getElementById('bagAmt').value = parseInt(document.getElementById('bagAmt').value) - 10;updateBagTotal()}">-10</button><input type="number" id="bagAmt" value="10" min="0" onchange="updateBagTotal()"><button class="plusminus" onclick="document.getElementById('bagAmt').value = parseInt(document.getElementById('bagAmt').value) + 10;updateBagTotal()">+10</button><br>
                 <p id="bagTotal">Total: $100</p>
+                <div id="buybagsbutton">
                 <button onclick="buyBags()">Buy Bags</button>
+                </div>
             </div>
             <div id="marketContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=1" loading="eager"></iframe>
+                <iframe id="embed1" src="/scratchembed?q=1" loading="eager"></iframe>
             </div>
             <div id="marketStats">
                 <h2>Market Stats</h2>
@@ -46,7 +48,7 @@
                 <button onclick="sellChildren()">Sell Children</button>
             </div>
             <div id="warehouseContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=2"></iframe>
+                <iframe id="embed2" src="/scratchembed?q=2"></iframe>
             </div>
             <div id="warehouseStats">
                 <h2>Warehouse Stats</h2>
@@ -59,7 +61,7 @@
                 <button id="expandButton" onclick="expandWarehouse()">Expand Warehouse ($100k)</button>
             </div>
             <div id="employeeContainer" class="clickerFrame">
-                <iframe id="scratchFrame" src="/scratchembed?q=3" loading="eager"></iframe>
+                <iframe id="embed3" src="/scratchembed?q=3" loading="eager"></iframe>
             </div>
             <div id="managerHiring">
                 <h2>Manager Hiring</h2>
