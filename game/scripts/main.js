@@ -213,49 +213,21 @@ function buyBags() {
         const bagAmount = parseInt(document.getElementById('bagAmt').value);
         bno = bno + parseInt(document.getElementById('bagAmt').value);
         cno = cno - (parseInt(document.getElementById('bagAmt').value) * 10);
+        const obj = JSON.parse(localStorage.getItem(key1))
+        obj.data.bno = parseInt(bno)
+        localStorage.setItem(key1, JSON.stringify(obj));
         localStorage.setItem('cno', cno);
+        localStorage.setItem('bno', bno);
         console.debug(`Bags purchased successfully. New bag count: ${bno}, New cash amount: $${formatNumber(cno, 2)}`)
         console.debug(`Starting check purchase interval to make sure bags were added. Bag amount: ${bagAmount}, Old bags: ${oldBno}, Current bags: ${bno}`)
-        setTimeout(function () {
-            if (bno !== oldBno + bagAmount) {
-                bno = oldBno + bagAmount;
-                const obj = JSON.parse(localStorage.getItem(key1))
-                obj.data.bno = parseInt(bno)
-                localStorage.setItem(key1, JSON.stringify(obj));
-                console.warn(`Bags were not added correctly. Adding bags again. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
-            };
-        }, 200)
-        setTimeout(function () {
-            if (bno !== oldBno + bagAmount) {
-                bno = oldBno + bagAmount;
-                const obj = JSON.parse(localStorage.getItem(key1))
-                obj.data.bno = parseInt(bno)
-                localStorage.setItem(key1, JSON.stringify(obj));
-                console.warn(`Bags were removed incorrectly. Adding bags again. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
-            }
-        }, 100)
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         console.debug(`Bags were added successfully. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
-        for (let i = 4; i >= 0; i--) {
-            console.debug(`Setting buy bags button to invalid. Time until re-enable: ${i}s`)
-            setTimeout(function () {
-                document.getElementById('buybagsbutton').classList.add('invalid');
-                document.getElementById('buybagsbutton').innerHTML = `<button onclick="buyBags()">Buy Bags (${i + 1}s)</button>`;
-            }, -i * 1000)
-        }
-        setTimeout(function () {
-            document.getElementById('buybagsbutton').classList.remove('invalid');
-            document.getElementById('buybagsbutton').innerHTML = `<button onclick="buyBags()">Buy Bags</button>`;
-        }, 5000)
     } else {
         console.debug(`Not enough cash to buy bags. Attempted to buy ${document.getElementById('bagAmt').value} bags for $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}, but only have $${formatNumber(cno, 2)}`)
         return;
     }
     buyingBags = false;
-    const obj = JSON.parse(localStorage.getItem(key1))
-    obj.data.bno = parseInt(bno)
-    localStorage.setItem(key1, JSON.stringify(obj));
 }
 function hireManager(id) {
     if (id == 1 && managerLevel == 0 && cno >= 5000000) {
