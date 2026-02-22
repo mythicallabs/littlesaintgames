@@ -90,11 +90,17 @@ button, input {
 
 /* Mobile optimization */
 @media (max-width: 768px) {
+    nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     #navbarButtons{
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    height: 100%;
+        position: static;
+        display: flex;
+        justify-content: center;
+        height: auto;
+        margin-top: 8px;
     }
     hr{
         width: 100%;
