@@ -235,9 +235,6 @@ function buyBags() {
         const bagAmount = parseInt(document.getElementById('bagAmt').value);
         bno = bno + parseInt(document.getElementById('bagAmt').value);
         cno = cno - (parseInt(document.getElementById('bagAmt').value) * 10);
-        const obj = JSON.parse(localStorage.getItem(key1))
-        obj.data.bno = parseInt(bno)
-        localStorage.setItem(key1, JSON.stringify(obj));
         localStorage.setItem('cno', cno);
         console.debug(`Bags purchased successfully. New bag count: ${bno}, New cash amount: $${formatNumber(cno, 2)}`)
         console.debug(`Starting check purchase interval to make sure bags were added. Bag amount: ${bagAmount}, Old bags: ${oldBno}, Current bags: ${bno}`)
@@ -284,7 +281,9 @@ function buyBags() {
             __embed0.src = __embed0Src;
         }, 50);
     }
-
+    const obj = JSON.parse(localStorage.getItem(key1))
+    obj.data.bno = parseInt(bno)
+    localStorage.setItem(key1, JSON.stringify(obj));
 }
 function hireManager(id) {
     if (id == 1 && managerLevel == 0 && cno >= 5000000) {
@@ -454,12 +453,41 @@ function resetGame() {
         console.warn("Game has been reset and iframes reloaded.");
     }, 50); // 50ms delay ensures iframes are fully unloaded
 }
+// ── Menu Modal ───────────────────────────────────────────
+function openMenu() {
+    const overlay = document.getElementById('menuOverlay');
+    if (overlay) {
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden'; // prevent background scroll
+    }
+}
+function closeMenu(event) {
+    // If called from overlay click, only close when clicking the backdrop itself
+    if (event && event.target !== document.getElementById('menuOverlay')) return;
+    const overlay = document.getElementById('menuOverlay');
+    if (overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
+
 // Attach event listener to the toggle button
 document.addEventListener('DOMContentLoaded', function () {
     const toggleButton = document.getElementById('darkModeToggle');
     if (toggleButton) {
         toggleButton.addEventListener('click', toggleDarkMode);
     }
+
+    // Wire menu button
+    const menuButton = document.getElementById('menuButton');
+    if (menuButton) {
+        menuButton.addEventListener('click', openMenu);
+    }
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+    });
 
     // Make iframe scrolling affect the entire page
     document.addEventListener('scroll', (e) => {

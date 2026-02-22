@@ -9,17 +9,67 @@
             window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
         </script>
         <script defer src="/_vercel/speed-insights/script.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
         <script src="/script"></script>
         <link rel="stylesheet" href="/style">
         <title>Little Saint Games V1.12.8[UNSTABLE]</title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
     </head>
     <body>
+        <!-- Menu Modal -->
+        <div id="menuOverlay" class="menu-overlay" onclick="closeMenu(event)">
+            <div class="menu-modal" role="dialog" aria-modal="true" aria-label="Game Menu">
+                <button class="menu-modal-close" onclick="closeMenu()" aria-label="Close menu">✕</button>
+
+                <h2 class="menu-modal-title">☰ Menu</h2>
+
+                <section class="menu-section">
+                    <h3>📊 Game Stats</h3>
+                    <p class="menu-placeholder">Your game statistics will appear here.</p>
+                    <ul class="menu-stat-list">
+                        <li>Total Children Collected: <span class="stat-value">—</span></li>
+                        <li>Total Cash Earned: <span class="stat-value">—</span></li>
+                        <li>Warehouse Level: <span class="stat-value">—</span></li>
+                        <li>Manager Hired: <span class="stat-value">—</span></li>
+                    </ul>
+                </section>
+
+                <hr class="menu-divider">
+
+                <section class="menu-section">
+                    <h3>⚙️ Settings</h3>
+                    <div class="menu-setting-row">
+                        <label for="soundToggle">🔊 Sound</label>
+                        <input type="checkbox" id="soundToggle" disabled title="Coming soon">
+                        <span class="menu-coming-soon">Coming soon</span>
+                    </div>
+                    <div class="menu-setting-row">
+                        <label>🎵 Music</label>
+                        <input type="checkbox" disabled title="Coming soon">
+                        <span class="menu-coming-soon">Coming soon</span>
+                    </div>
+                    <div class="menu-setting-row">
+                        <label>🔔 Notifications</label>
+                        <input type="checkbox" disabled title="Coming soon">
+                        <span class="menu-coming-soon">Coming soon</span>
+                    </div>
+                </section>
+
+                <hr class="menu-divider">
+
+                <section class="menu-section menu-section-footer">
+                    <p class="menu-placeholder">More options coming soon!</p>
+                </section>
+            </div>
+        </div>
+
         <div id="resetButton"><button onclick="resetGame()">Reset</button></div>
         <nav>
             <h1>Little Saint Games V1.12.8[UNSTABLE]</h1>
+            <div id="navbarButtons">
+            <button id="menuButton" title="Menu" class="menu">☰</button>
             <button id="darkModeToggle" title="Toggle Dark Mode" class="dark-mode">🌙</button>
+            </div>
         </nav>
         <div class="container">
             <div id="kidnapContainer" class="clickerFrame">
