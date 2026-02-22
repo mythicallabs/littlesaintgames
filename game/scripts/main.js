@@ -89,7 +89,7 @@ function pageloaded() {
     }
 }
 function updateCounts() {
-    if (localStorage.getItem(key1)) {
+    if (localStorage.getItem(key1) && !buyingBags) {
         const obj = JSON.parse(localStorage.getItem(key1));
         if (obj.data.policeval == 1) {
             obj.data.policeval = 0
@@ -105,7 +105,9 @@ function updateCounts() {
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         ccno = obj.data.ccno
         document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-    } else {
+    } else if(buyingBags) {
+        const obj = JSON.parse(localStorage.getItem(key1));
+    }else{
         localStorage.setItem(key1, JSON.stringify({ data: { policeval: 0, ccno: 0, bno: 0, cap: 100 } }));
         bno = 0
         ccno = 0
@@ -189,47 +191,23 @@ function workerSlave() {
     }
 }
 function sellChildren() {
-    // --- UNLOAD embed0 ---
-    var __embed0 = document.getElementById("embed0");
-    var __embed0Src = null;
-
-    if (__embed0) {
-        __embed0Src = __embed0.src;
-        __embed0.src = "about:blank";
-    }
+    buyingBags = true;
     setTimeout(function () {
-    tempccno = ccno;
+    cno = parseInt(cno) + (parseInt(ccno) * parseInt(mktval));
     ccno = 0;
     const obj = JSON.parse(localStorage.getItem(key1));
     obj.data.ccno = 0
     localStorage.setItem(key1, JSON.stringify(obj))
     document.getElementById('ccno').innerHTML = `Children Collected: ${formatNumber(ccno, 2)}`;
-    cno = parseInt(cno) + (parseInt(tempccno) * parseInt(mktval));
     document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
     localStorage.setItem('cno', cno)
     reportSale(tempccno);
-    }, 200)
-    // --- RELOAD embed0 ---
-    if (__embed0 && __embed0Src) {
-        setTimeout(function () {
-            __embed0.src = __embed0Src;
-        }, 50);
-    }
-
+    }, 100)
+    buyingBags = false;
 }
 function buyBags() {
-    // --- UNLOAD embed0 ---
-    var __embed0 = document.getElementById("embed0");
-    var __embed0Src = null;
-
-    if (__embed0) {
-        __embed0Src = __embed0.src;
-        __embed0.src = "about:blank";
-    }
-
-    oldBno = bno;
-    if (buyingBags) return; // Prevent multiple simultaneous purchases
     buyingBags = true;
+    oldBno = bno;
     console.debug(`Attempting to buy bags. Bag amount: ${document.getElementById('bagAmt').value}, Total cost: $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}, Current cash: $${formatNumber(cno, 2)}`)
     if (parseInt(document.getElementById('bagAmt').value) * 10 <= cno) {
         const bagAmount = parseInt(document.getElementById('bagAmt').value);
@@ -256,7 +234,6 @@ function buyBags() {
                 console.warn(`Bags were removed incorrectly. Adding bags again. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
             }
         }, 100)
-        buyingBags = false;
         document.getElementById('bno').innerHTML = `Bags: ${bno}`;
         document.getElementById('cno').innerHTML = `Cash: $${formatNumber(cno, 2)}`;
         console.debug(`Bags were added successfully. Bag amount: ${bagAmount}, Current bags: ${bno}, Old bags: ${oldBno}`)
@@ -275,12 +252,7 @@ function buyBags() {
         console.debug(`Not enough cash to buy bags. Attempted to buy ${document.getElementById('bagAmt').value} bags for $${formatNumber((parseInt(document.getElementById('bagAmt').value) * 10), 2)}, but only have $${formatNumber(cno, 2)}`)
         return;
     }
-    // --- RELOAD embed0 ---
-    if (__embed0 && __embed0Src) {
-        setTimeout(function () {
-            __embed0.src = __embed0Src;
-        }, 50);
-    }
+    buyingBags = false;
     const obj = JSON.parse(localStorage.getItem(key1))
     obj.data.bno = parseInt(bno)
     localStorage.setItem(key1, JSON.stringify(obj));
@@ -315,7 +287,6 @@ function reportSale(amount) {
     const obj = JSON.parse(localStorage.getItem(key2));
     obj.data.ccno = amount
     localStorage.setItem(key2, JSON.stringify(obj))
-
 }
 function expandWarehouse() {
     if (cno >= warehouseCost) {
